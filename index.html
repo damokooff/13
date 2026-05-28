@@ -116,6 +116,24 @@
             gap: 30px;
         }
 
+        .main-box {
+            background: #181818;
+            border: 1px solid #333;
+            padding: 22px;
+            margin-bottom: 25px;
+        }
+
+        .main-box h3 {
+            color: #ff5555;
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
         .sidebar {
             display: flex;
             flex-direction: column;
@@ -172,24 +190,6 @@
             color: #cccccc;
         }
 
-        .stat-box { text-align: center; }
-
-        .stat-number {
-            font-size: 52px;
-            color: #ff4444;
-            font-weight: bold;
-            font-family: 'Georgia', serif;
-            text-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #aaaaaa;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 5px;
-        }
-
         .footer {
             background: #0a0a0a;
             border-top: 3px solid #8b0000;
@@ -231,40 +231,6 @@
             background: rgba(139, 0, 0, 0.05);
         }
 
-        .info-row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .info-card {
-            flex: 1;
-            min-width: 200px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .info-card .value {
-            font-size: 36px;
-            color: #ff4444;
-            font-family: 'Georgia', serif;
-            font-weight: bold;
-            text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-        }
-
-        .info-card .label {
-            font-size: 13px;
-            color: #999999;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-top: 5px;
-        }
-
-        .loading { color: #666; font-style: italic; font-size: 14px; text-align: center; }
-
         .last-update {
             text-align: center;
             color: #555;
@@ -305,6 +271,26 @@
 
         .refresh-btn:active { transform: scale(0.96); }
         .refresh-btn.spinning { pointer-events: none; opacity: 0.6; }
+
+        .raid-count-box {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .raid-count-number {
+            font-size: 48px;
+            color: #ff4444;
+            font-weight: bold;
+            font-family: 'Georgia', serif;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .raid-count-label {
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -328,19 +314,12 @@
 
         <main>
 
-            <div class="info-row">
-                <div class="info-card">
-                    <div class="value" id="memberCount">...</div>
-                    <div class="label">Membres</div>
-                </div>
-                <div class="info-card">
-                    <div class="value" id="raidCount">...</div>
-                    <div class="label">Raids Reussis</div>
-                </div>
-                <div class="info-card">
-                    <div class="value">0</div>
-                    <div class="label">Defaites</div>
-                </div>
+            <div class="main-box">
+                <h3>Hierarchie</h3>
+                <ul class="member-list" id="memberList">
+                    <li class="loading">Chargement...</li>
+                </ul>
+                <p style="color:#666; font-size:12px; text-align:center; margin-top:12px; font-style:italic;">Recrutement en cours...</p>
             </div>
 
             <div class="quote">
@@ -357,26 +336,6 @@
         <aside class="sidebar">
 
             <div class="sidebar-box">
-                <h3>Hierarchie</h3>
-                <ul class="member-list" id="memberList">
-                    <li class="loading">Chargement...</li>
-                </ul>
-                <p style="color:#666; font-size:12px; text-align:center; margin-top:12px; font-style:italic;">Recrutement en cours...</p>
-            </div>
-
-            <div class="sidebar-box stat-box">
-                <h3>Statistiques</h3>
-                <div class="stat-number" id="statMembers">...</div>
-                <div class="stat-label">Membres Actifs</div>
-                <br>
-                <div class="stat-number" id="statRaids">...</div>
-                <div class="stat-label">Raids Reussis</div>
-                <br>
-                <div class="stat-number">0</div>
-                <div class="stat-label">Defaites</div>
-            </div>
-
-            <div class="sidebar-box">
                 <h3>Regles d'Or</h3>
                 <ul class="member-list" style="list-style: none;">
                     <li style="color: #ff7777;">1 Silence sur les operations</li>
@@ -387,10 +346,12 @@
                 </ul>
             </div>
 
-            <div class="sidebar-box" style="text-align: center;">
-                <p style="color:#999; font-size:12px; letter-spacing:2px;">Serveur Prive</p>
-                <p style="color:#ff5555; font-family:monospace; font-size:15px;">mafia13.minecraft</p>
-                <p style="color:#555; font-size:11px;">(sur invitation uniquement)</p>
+            <div class="sidebar-box">
+                <h3>Raids</h3>
+                <div class="raid-count-box">
+                    <div class="raid-count-number" id="raidCount">...</div>
+                    <div class="raid-count-label">Raids Reussis</div>
+                </div>
             </div>
 
         </aside>
@@ -406,23 +367,12 @@
         // Animation du titre de l'onglet
         const fullTitle = "MAFIA 13";
         let currentIndex = 1;
-        let isResetting = false;
 
         function animateTabTitle() {
-            if (isResetting) {
-                document.title = fullTitle.substring(0, currentIndex);
-                currentIndex++;
-                if (currentIndex > fullTitle.length) {
-                    isResetting = false;
-                    currentIndex = 1;
-                }
-            } else {
-                document.title = fullTitle.substring(0, currentIndex);
-                currentIndex++;
-                if (currentIndex > fullTitle.length) {
-                    isResetting = true;
-                    currentIndex = 0;
-                }
+            document.title = fullTitle.substring(0, currentIndex);
+            currentIndex++;
+            if (currentIndex > fullTitle.length) {
+                currentIndex = 1;
             }
         }
 
@@ -469,10 +419,7 @@
         function updateUI(members, raidsCount) {
             console.log('UI mise a jour :', members.length, 'membres,', raidsCount, 'raids');
 
-            document.getElementById('memberCount').textContent = members.length;
             document.getElementById('raidCount').textContent = raidsCount;
-            document.getElementById('statMembers').textContent = members.length;
-            document.getElementById('statRaids').textContent = raidsCount;
 
             const memberListEl = document.getElementById('memberList');
             if (members.length === 0) {
@@ -581,10 +528,7 @@
 
             if (!success) {
                 console.error('Tous les fetchs ont echoue');
-                updateUI(
-                    [{ name: 'damoko', rank: 'leader' }],
-                    0
-                );
+                updateUI([{ name: 'damoko', rank: 'leader' }], 0);
             }
 
             if (btn && btn.dataset.manual === 'true') {
