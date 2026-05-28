@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Mafia 13 - La Puissance Minecraft</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            background-image:
+                radial-gradient(ellipse at center, rgba(139, 0, 0, 0.08) 0%, transparent 70%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" fill="none"/><circle cx="20" cy="20" r="1" fill="%23222"/></svg>');
+            line-height: 1.7;
+        }
+
+        .header {
+            background: linear-gradient(180deg, #1a0000 0%, #0d0000 50%, #0d0d0d 100%);
+            text-align: center;
+            padding: 60px 20px 40px;
+            border-bottom: 3px solid #8b0000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(139, 0, 0, 0.02) 2px,
+                    rgba(139, 0, 0, 0.02) 4px);
+            pointer-events: none;
+        }
+
+        .mafia-logo {
+            font-size: 80px;
+            font-weight: bold;
+            color: #cc0000;
+            text-shadow:
+                0 0 15px #cc0000,
+                0 0 50px #880000,
+                0 0 100px #440000,
+                4px 4px 0 #000;
+            letter-spacing: 10px;
+            margin-bottom: 10px;
+            font-family: 'Georgia', serif;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #bbbbbb;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav {
+            background: #151515;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+        }
+
+        .nav-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: #cccccc;
+            text-decoration: none;
+            padding: 16px 28px;
+            font-size: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            font-weight: 600;
+        }
+
+        .nav a:hover {
+            color: #ff4444;
+            border-bottom-color: #cc0000;
+            background: rgba(139, 0, 0, 0.15);
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .sidebar-box {
+            background: #181818;
+            border: 1px solid #333;
+            padding: 22px;
+        }
+
+        .sidebar-box h3 {
+            color: #ff5555;
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .member-list {
+            list-style: none;
+        }
+
+        .member-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #1f1f1f;
+            color: #dddddd;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rank-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-left: auto;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .rank-leader { background: #cc0000; color: #fff; }
+        .rank-second { background: #660000; color: #eee; }
+        .rank-general { background: #990000; color: #fff; }
+
+        .rank-badge:not(.rank-leader):not(.rank-second):not(.rank-general) {
+            background: #3a3a3a;
+            color: #cccccc;
+        }
+
+        .stat-box { text-align: center; }
+
+        .stat-number {
+            font-size: 52px;
+            color: #ff4444;
+            font-weight: bold;
+            font-family: 'Georgia', serif;
+            text-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #aaaaaa;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .footer {
+            background: #0a0a0a;
+            border-top: 3px solid #8b0000;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            color: #777777;
+            font-size: 13px;
+            letter-spacing: 2px;
+        }
+
+        .footer strong { color: #cc0000; }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .mafia-logo { font-size: 44px; letter-spacing: 5px; }
+            .nav a { padding: 12px 14px; font-size: 12px; }
+            .sidebar { order: -1; }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+
+        .mafia-logo { animation: flicker 3s infinite; }
+
+        .quote {
+            font-style: italic;
+            color: #ff7777;
+            text-align: center;
+            padding: 25px;
+            border-top: 2px solid #8b0000;
+            border-bottom: 2px solid #8b0000;
+            margin-top: 20px;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: rgba(139, 0, 0, 0.05);
+        }
+
+        .info-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            flex: 1;
+            min-width: 200px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .info-card .value {
+            font-size: 36px;
+            color: #ff4444;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .info-card .label {
+            font-size: 13px;
+            color: #999999;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .loading { color: #666; font-style: italic; font-size: 14px; text-align: center; }
+
+        .last-update {
+            text-align: center;
+            color: #555;
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-top: 15px;
+        }
+
+        .next-update {
+            text-align: center;
+            color: #444;
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        .refresh-btn {
+            display: block;
+            margin: 20px auto 0;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #666;
+            padding: 8px 18px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+
+        .refresh-btn:hover {
+            border-color: #ff4444;
+            color: #ff4444;
+            background: rgba(139, 0, 0, 0.1);
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .refresh-btn:active { transform: scale(0.96); }
+        .refresh-btn.spinning { pointer-events: none; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="mafia-logo">MAFIA 13</div>
+        <p class="subtitle">La Mafia . Depuis Mai 2026</p>
+        <p style="color:#999; margin-top:10px; font-size:14px; letter-spacing:4px;">Respect . Loyaute . Puissance</p>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#">Accueil</a>
+            <a href="#">Membres</a>
+            <a href="#">Recrutement</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <main>
+
+            <div class="info-row">
+                <div class="info-card">
+                    <div class="value" id="memberCount">...</div>
+                    <div class="label">Membres</div>
+                </div>
+                <div class="info-card">
+                    <div class="value" id="raidCount">...</div>
+                    <div class="label">Raids Reussis</div>
+                </div>
+                <div class="info-card">
+                    <div class="value">0</div>
+                    <div class="label">Defaites</div>
+                </div>
+            </div>
+
+            <div class="quote">
+                S'en prendre a un seul membre de la Mafia 13, c'est s'en prendre a l'organisation tout entiere.
+            </div>
+
+            <p class="last-update" id="lastUpdate">Chargement des donnees...</p>
+            <p class="next-update" id="nextUpdate"></p>
+
+            <button class="refresh-btn" id="refreshBtn" title="Only use if you are a dev">Refresh Data</button>
+
+        </main>
+
+        <aside class="sidebar">
+
+            <div class="sidebar-box">
+                <h3>Hierarchie</h3>
+                <ul class="member-list" id="memberList">
+                    <li class="loading">Chargement...</li>
+                </ul>
+                <p style="color:#666; font-size:12px; text-align:center; margin-top:12px; font-style:italic;">Recrutement en cours...</p>
+            </div>
+
+            <div class="sidebar-box stat-box">
+                <h3>Statistiques</h3>
+                <div class="stat-number" id="statMembers">...</div>
+                <div class="stat-label">Membres Actifs</div>
+                <br>
+                <div class="stat-number" id="statRaids">...</div>
+                <div class="stat-label">Raids Reussis</div>
+                <br>
+                <div class="stat-number">0</div>
+                <div class="stat-label">Defaites</div>
+            </div>
+
+            <div class="sidebar-box">
+                <h3>Regles d'Or</h3>
+                <ul class="member-list" style="list-style: none;">
+                    <li style="color: #ff7777;">1 Silence sur les operations</li>
+                    <li>2 Loyaute absolue</li>
+                    <li>3 Entraide entre membres</li>
+                    <li>4 Respect des ordres</li>
+                    <li>5 Jamais de trahison</li>
+                </ul>
+            </div>
+
+            <div class="sidebar-box" style="text-align: center;">
+                <p style="color:#999; font-size:12px; letter-spacing:2px;">Serveur Prive</p>
+                <p style="color:#ff5555; font-family:monospace; font-size:15px;">mafia13.minecraft</p>
+                <p style="color:#555; font-size:11px;">(sur invitation uniquement)</p>
+            </div>
+
+        </aside>
+    </div>
+
+    <footer class="footer">
+        <p>2026 <strong>MAFIA 13</strong> . Tous droits reserves.</p>
+        <p style="margin-top:5px;">L'organisation avant tout.</p>
+        <p style="margin-top:10px; color:#555; font-size:11px;">Minecraft clan blog . Site non officiel</p>
+    </footer>
+
+    <script>
+        // Animation du titre de l'onglet
+        const fullTitle = "MAFIA 13";
+        let currentIndex = 1;
+        let isResetting = false;
+
+        function animateTabTitle() {
+            if (isResetting) {
+                document.title = fullTitle.substring(0, currentIndex);
+                currentIndex++;
+                if (currentIndex > fullTitle.length) {
+                    isResetting = false;
+                    currentIndex = 1;
+                }
+            } else {
+                document.title = fullTitle.substring(0, currentIndex);
+                currentIndex++;
+                if (currentIndex > fullTitle.length) {
+                    isResetting = true;
+                    currentIndex = 0;
+                }
+            }
+        }
+
+        setInterval(animateTabTitle, 1000);
+        document.title = 'M';
+
+        // URL de ton fichier
+        const DATA_URL = 'https://raw.githubusercontent.com/damokooff/13desc/main/info.txt';
+        const REFRESH_INTERVAL = 30;
+
+        const CORS_PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://api.codetabs.com/v1/proxy?quest='
+        ];
+
+        let nextFetchTime = null;
+        let countdownInterval = null;
+
+        function updateCountdown() {
+            if (!nextFetchTime) {
+                document.getElementById('nextUpdate').textContent = '';
+                return;
+            }
+
+            const now = new Date();
+            const diff = Math.max(0, Math.floor((nextFetchTime - now) / 1000));
+
+            if (diff <= 0) {
+                document.getElementById('nextUpdate').textContent = 'Prochaine mise a jour : imminente...';
+            } else {
+                document.getElementById('nextUpdate').textContent = 'Prochaine mise a jour dans : ' + diff + 's';
+            }
+        }
+
+        function resetCountdown() {
+            nextFetchTime = new Date(Date.now() + REFRESH_INTERVAL * 1000);
+            updateCountdown();
+
+            if (countdownInterval) clearInterval(countdownInterval);
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        function updateUI(members, raidsCount) {
+            console.log('UI mise a jour :', members.length, 'membres,', raidsCount, 'raids');
+
+            document.getElementById('memberCount').textContent = members.length;
+            document.getElementById('raidCount').textContent = raidsCount;
+            document.getElementById('statMembers').textContent = members.length;
+            document.getElementById('statRaids').textContent = raidsCount;
+
+            const memberListEl = document.getElementById('memberList');
+            if (members.length === 0) {
+                memberListEl.innerHTML = '<li style="color:#666; font-style:italic;">Aucun membre pour le moment</li>';
+            } else {
+                memberListEl.innerHTML = members.map(m => {
+                    const rankLower = m.rank.toLowerCase();
+                    let rankClass = 'rank-badge';
+                    if (rankLower === 'leader') rankClass += ' rank-leader';
+                    else if (rankLower === 'second') rankClass += ' rank-second';
+                    else if (rankLower === 'general' || rankLower === 'general') rankClass += ' rank-general';
+
+                    return `
+                        <li>
+                            ${m.name} <span class="${rankClass}">${m.rank}</span>
+                        </li>
+                    `;
+                }).join('');
+            }
+
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent =
+                'Derniere mise a jour : ' + now.toLocaleDateString('fr-FR') + ' a ' + now.toLocaleTimeString('fr-FR');
+
+            resetCountdown();
+        }
+
+        function parseData(text) {
+            const lines = text.split('\n');
+            let members = [];
+            let raidsCount = 0;
+            let currentSection = null;
+
+            for (let line of lines) {
+                line = line.trim();
+
+                if (line.startsWith('#') || line === '') {
+                    if (line.includes('member')) {
+                        currentSection = 'members';
+                    }
+                    if (line.includes('n du raid') || line.includes('raid')) {
+                        currentSection = 'raids';
+                    }
+                    continue;
+                }
+
+                if (line.startsWith('___') || line.startsWith('---')) continue;
+
+                if (currentSection === 'members' && line.includes('-')) {
+                    const parts = line.split('-').map(p => p.trim());
+                    if (parts.length >= 2) {
+                        members.push({ name: parts[0], rank: parts[1] });
+                    }
+                }
+
+                if (currentSection === 'raids' && line !== '') {
+                    raidsCount++;
+                }
+            }
+
+            return { members, raidsCount };
+        }
+
+        async function fetchData() {
+            console.log('Fetch des donnees...');
+            const btn = document.getElementById('refreshBtn');
+            if (btn && btn.dataset.manual === 'true') {
+                btn.textContent = 'Chargement...';
+                btn.classList.add('spinning');
+            }
+
+            let success = false;
+
+            try {
+                console.log('Tentative fetch direct...');
+                const response = await fetch(DATA_URL);
+                if (response.ok) {
+                    const text = await response.text();
+                    const { members, raidsCount } = parseData(text);
+                    updateUI(members, raidsCount);
+                    success = true;
+                    console.log('Fetch direct reussi !');
+                }
+            } catch (e) {
+                console.log('Fetch direct echoue, tentative proxies CORS...');
+            }
+
+            if (!success) {
+                for (let proxy of CORS_PROXIES) {
+                    try {
+                        console.log('Tentative proxy:', proxy);
+                        const response = await fetch(proxy + encodeURIComponent(DATA_URL));
+                        if (response.ok) {
+                            const text = await response.text();
+                            const { members, raidsCount } = parseData(text);
+                            updateUI(members, raidsCount);
+                            success = true;
+                            console.log('Proxy reussi:', proxy);
+                            break;
+                        }
+                    } catch (e) {
+                        console.log('Proxy echoue:', proxy);
+                    }
+                }
+            }
+
+            if (!success) {
+                console.error('Tous les fetchs ont echoue');
+                updateUI(
+                    [{ name: 'damoko', rank: 'leader' }],
+                    0
+                );
+            }
+
+            if (btn && btn.dataset.manual === 'true') {
+                btn.textContent = success ? 'Donnees actualisees' : 'Echec - Donnees en dur';
+                btn.classList.remove('spinning');
+                btn.dataset.manual = 'false';
+                setTimeout(() => { btn.textContent = 'Refresh Data'; }, 2000);
+            }
+        }
+
+        console.log('Chargement de la page - Fetch automatique...');
+        fetchData();
+
+        document.getElementById('refreshBtn').addEventListener('click', function() {
+            this.dataset.manual = 'true';
+            fetchData();
+        });
+
+        setInterval(fetchData, REFRESH_INTERVAL * 1000);
+        console.log('Auto-refresh programme toutes les ' + REFRESH_INTERVAL + ' secondes');
+
+        resetCountdown();
+    </script>
+
+</body>
+</html>
